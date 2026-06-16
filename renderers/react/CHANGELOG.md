@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 0.10.1
+
 - (v0_9) Tighten resolved child list types in the basic catalog layout components.
 - (v0_9) Render known Text variants (h1–h5, caption) with declarative HTML instead of Markdown. [#1516](https://github.com/google/A2UI/issues/1516)
 - (v0_9) Add missing CSS classes to `Modal`, `Tabs`, `Card` and `ChoicePicker` to align with the
