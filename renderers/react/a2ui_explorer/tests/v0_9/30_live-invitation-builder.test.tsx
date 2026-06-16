@@ -153,7 +153,7 @@ describe('Example: Live Invitation Builder', () => {
     expect(ballroomChip).toBeTruthy();
 
     await act(async () => {
-      ballroomChip!.click();
+      ballroomChip?.click();
       await whenSettled();
     });
 
@@ -168,7 +168,7 @@ describe('Example: Live Invitation Builder', () => {
     expect(terraceChip).toBeTruthy();
 
     await act(async () => {
-      terraceChip!.click();
+      terraceChip?.click();
       await whenSettled();
     });
 

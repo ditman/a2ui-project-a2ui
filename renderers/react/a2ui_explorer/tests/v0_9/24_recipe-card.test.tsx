@@ -57,11 +57,11 @@ describe('Example: Recipe Card', () => {
 
   it('should switch to Ingredients tab', async () => {
     const tabs = Array.from(surface.querySelectorAll('.a2ui-tab-button')) as HTMLElement[];
-    const tab = tabs.find(t => t.textContent.includes('Ingredients'))!;
+    const tab = tabs.find(t => t.textContent?.includes('Ingredients'));
     expect(tab).withContext('Should find Ingredients tab').toBeTruthy();
 
     await act(async () => {
-      tab.click();
+      tab?.click();
       await whenSettled();
     });
 
@@ -72,11 +72,11 @@ describe('Example: Recipe Card', () => {
 
   it('should switch to Instructions tab', async () => {
     const tabs = Array.from(surface.querySelectorAll('.a2ui-tab-button')) as HTMLElement[];
-    const tab = tabs.find(t => t.textContent.includes('Instructions'))!;
+    const tab = tabs.find(t => t.textContent?.includes('Instructions'));
     expect(tab).withContext('Should find Instructions tab').toBeTruthy();
 
     await act(async () => {
-      tab.click();
+      tab?.click();
       await whenSettled();
     });
 

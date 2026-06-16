@@ -69,7 +69,7 @@ describe('Example: Movie Card', () => {
 
     const video = Array.from(surface.querySelectorAll('video'))[0] as HTMLVideoElement;
     expect(video).toBeTruthy();
-    expect(video!.getAttribute('src')).toBe('https://www.w3schools.com/html/mov_bbb.mp4');
+    expect(video?.getAttribute('src')).toBe('https://www.w3schools.com/html/mov_bbb.mp4');
 
     // Cleanup: close modal by clicking close button
     const closeBtn = Array.from(surface.querySelectorAll('.a2ui-modal-close'))[0] as HTMLElement;

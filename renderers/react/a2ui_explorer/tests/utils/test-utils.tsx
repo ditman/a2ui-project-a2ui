@@ -63,7 +63,7 @@ export async function cleanup() {
   if (activeRoot) {
     try {
       await act(async () => {
-        activeRoot!.unmount();
+        activeRoot?.unmount();
         await whenSettled();
       });
     } finally {
