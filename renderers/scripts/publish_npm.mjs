@@ -30,6 +30,29 @@ import {parseArgs} from 'node:util';
 const {yellow, red, green, reset, bold} = ansi;
 
 /**
+ * Prints the command line usage instructions and examples.
+ */
+function printHelp() {
+  console.log(`Usage: publish_npm [options]
+
+Publishes A2UI workspace packages to NPM / Artifact Registry in topological dependency order.
+
+Options:
+  -p, --package <name>                 Package(s) to publish. Can be specified multiple times.
+                                       Accepts short names (e.g., 'web_core') or scoped names (e.g., '@a2ui/web_core').
+  --no-dry-run                         Actually publish the packages and obtain fresh auth tokens.
+  --skip-tests                         Skip building and testing packages before publishing. Not recommended.
+  -h, --help                           Show this complete help message.
+
+Examples:
+  # Dry run publishing a single package
+  ./publish_npm.mjs --package=web_core
+
+  # Actually publish multiple packages, skipping tests
+  ./publish_npm.mjs -p web_core -p react --no-dry-run --skip-tests`);
+}
+
+/**
  * Topologically sorts package objects based on their internal dependencies.
  *
  * @param {Object[]} packageObjects - The package objects to sort.
@@ -349,38 +372,19 @@ export async function main(args, mocks = {}) {
   };
 
   const {values} = parseArgs({args, options, allowNegative: true});
-
-  if (values.help) {
-    console.log(`Usage: publish_npm [options]
-
-Publishes A2UI workspace packages to NPM / Artifact Registry in topological dependency order.
-
-Options:
-  -p, --package <name>                 Package(s) to publish. Can be specified multiple times.
-                                       Accepts short names (e.g., 'web_core') or scoped names (e.g., '@a2ui/web_core').
-  --check-core-dependencies            Verify that core dependencies are also being published.
-  --no-check-core-dependencies         Skip core dependencies verification.
-  --dry-run                            Perform a dry run without actually publishing or obtaining auth tokens (default).
-  --no-dry-run                         Actually publish the packages and obtain fresh auth tokens.
-  --skip-tests                         Skip building and testing packages before publishing.
-  -h, --help                           Show this complete help message.
-
-Examples:
-  # Dry run publishing a single package
-  ./publish_npm.mjs --package=web_core
-
-  # Actually publish multiple packages, skipping tests
-  ./publish_npm.mjs -p web_core -p react --no-dry-run --skip-tests`);
-    return;
-  }
-  let packagesToPublish = values.package;
-
+  const packagesToPublish = values.package;
   const dryRun = values['dry-run'];
   const skipTests = values['skip-tests'];
 
+  if (values.help) {
+    printHelp();
+    return;
+  }
+
   if (packagesToPublish.length === 0) {
+    printHelp();
     throw new Error(
-      'Usage: publish_npm --package=pkg1 --package=pkg2 [--no-check-core-dependencies] [--no-dry-run] [--skip-tests]',
+      'Usage: publish_npm --package=pkg1 --package=pkg2 [--no-dry-run] [--skip-tests]',
     );
   }
 

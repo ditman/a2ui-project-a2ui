@@ -150,6 +150,16 @@ describe('publish_npm script integration test', () => {
     assert.ok(hasMdInstall, 'Should run yarn install in markdown-it');
   });
 
+  it('should throw an error when no packages are specified', async () => {
+    await assert.rejects(
+      () => main([]),
+      err => {
+        assert.match(err.message, /Usage: publish_npm --package=pkg1/);
+        return true;
+      },
+    );
+  });
+
   it('should output help message and return early when --help is passed', async () => {
     const executedCommands = [];
     const mocks = {
