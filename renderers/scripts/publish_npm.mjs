@@ -204,10 +204,12 @@ function getNpmVersion(pkg, {npmToken, exec}) {
 /**
  * Obtains an Artifact Registry token via gcloud if NPM_TOKEN is not in env.
  *
+ * This function throws if the token cannot be retrieved from the gcloud CLI.
+ *
  * @param {Function} exec - The execSync function to use.
  * @returns {string|null} The token string, or null if it could not be obtained.
  */
-function getRegistryToken(exec) {
+function getAccessToken(exec) {
   let npmToken = process.env.NPM_TOKEN;
   if (!npmToken) {
     console.log(`\n${bold}Obtaining Artifact Registry authentication token${reset}\n`);
@@ -217,8 +219,9 @@ function getRegistryToken(exec) {
         `Using token: ${npmToken.substring(0, 5)}...${npmToken.substring(npmToken.length - 5)}`,
       );
     } catch (e) {
-      console.warn(
-        `${yellow}⚠️ Could not obtain gcloud access token. Ensure you are logged in (${reset}gcloud auth login${yellow}).${reset}`,
+      throw new Error(
+        `${red}❌ Could not find access token. Run:\n   ${reset}gcloud auth login${red}`,
+        {cause: e},
       );
     }
   }
@@ -381,7 +384,7 @@ Examples:
     );
   }
 
-  const npmToken = getRegistryToken(exec);
+  const npmToken = getAccessToken(exec);
 
   // Checks the status of the current git branch.
   const commitHash = checkGitProvenance(exec);

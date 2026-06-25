@@ -166,4 +166,33 @@ describe('publish_npm script integration test', () => {
       'Should not run any commands when help is passed',
     );
   });
+
+  it('should throw when the auth token cannot be obtained', async () => {
+    const originalNpmToken = process.env.NPM_TOKEN;
+    delete process.env.NPM_TOKEN;
+
+    const mocks = {
+      runCommand: () => {},
+      execSync: cmd => {
+        if (cmd.includes('gcloud auth')) {
+          throw new Error('gcloud command failed');
+        }
+        return '';
+      },
+    };
+
+    try {
+      await assert.rejects(
+        () => main(['--package=web_core'], mocks),
+        err => {
+          assert.match(err.message, /Could not find access token/);
+          return true;
+        },
+      );
+    } finally {
+      if (originalNpmToken !== undefined) {
+        process.env.NPM_TOKEN = originalNpmToken;
+      }
+    }
+  });
 });
